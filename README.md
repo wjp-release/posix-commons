@@ -1,2 +1,3 @@
 # posix-commons
-posix file IO and network 
+
+posix file IO, IPC and network 

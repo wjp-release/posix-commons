@@ -1,0 +1,24 @@
+dist: trusty
+sudo: false
+language: cpp
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-8
+
+#before_install:
+#  - pip install --user cpp-coveralls
+
+script:
+  - cd build
+  - rm -rf *
+  - CXX=/usr/bin/g++-8 CC=/usr/bin/gcc-8 cmake -DCMAKE_BUILD_TYPE=Debug -Dtest=ON ..
+  - ls
+  - cmake --build .
+  - ./tests/tests
+
+#after_success:
+ # - cd ../..

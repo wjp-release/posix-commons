@@ -8,10 +8,10 @@
 
 #define inline_cap 48
 
-//sizeof slice = 64 bytes = cache line length
+//sizeof posixc_slice === 64 bytes === cache line length
 struct posixc_slice{
-    char        inlinebuf[inline_cap];
-    char*       buf;    
+    char        inlinebuf[inline_cap];  
+    char*       buf; // points to inline_buf for small strings; malloc()-ed address otherwise
     uint64_t    size;   
 };
 
@@ -20,7 +20,7 @@ void posixc_slice_init(posixc_slice*slice, uint64_t size){
     if(size>inline_cap){
         buf=(char*)malloc(size);
     }else{
-        slice->buf=inlinebuf;
+        slice->buf=slice->inlinebuf;
         slice->size=size;
     }
 }
@@ -37,5 +37,17 @@ void posixc_slice_init_from(posixc_slice*slice, const char* str){
     memcpy(slice->buf, str, size);
 }
 
+void posixc_slice_copy(posixc_slice*dst, posixc_slice*src){
+    dst->size=src->size;
+    if(dst->size<inline_cap){
+        dst->buf=dst->inlinebuf;
+    }else{
+        dst->buf=(char*)malloc(size);
+    }
+    memcpy(dst->buf,src->buf,src->size);
+}
 
+bool posixc_slice_contains(posic_slice*slice){
+    
+}
 

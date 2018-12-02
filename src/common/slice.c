@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "boyermoore.h"
+#include "kmp.h"
 
 #define inline_cap 48
 
@@ -47,9 +49,11 @@ void posixc_slice_copy(posixc_slice*dst, posixc_slice*src){
     memcpy(dst->buf,src->buf,src->size);
 }
 
-
-
-bool posixc_slice_contains(posic_slice*slice){
-    
+bool posixc_slice_contains(posic_slice*text, posic_slice* pattern){
+    if(pattern->size<=8){  // kmp works better when the pattern is small
+        return posixc_kmp_conains(text->buf,text->size,pattern->buf,pattern->size);
+    }else{ // boyermoore works better when the pattern and the text resemble "natural text" 
+        return posixc_boyermoore_contains(text->buf,text->size,pattern->buf,pattern->size);
+    }
 }
 

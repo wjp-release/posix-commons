@@ -1,3 +1,4 @@
 # posix-commons
 
-posix file IO, IPC and network 
+C99 library on posix platforms.
+

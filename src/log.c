@@ -4,55 +4,70 @@
 #include "log.h"
 
 static enum posixc_log_level        log_lowest = LOG_LEVEL_ERR;
-static pthread_mutex_t              mtx;
-static bool                         nonblocking = false;
-static FILE*                        logfile;
+static pthread_mutex_t              log_mtx;
+static bool                         log_nonblock = false;
+static FILE*                        log_file;
 
-void posixc_log_init(enum log_level lowest, bool nonblocking, const char* filename){
+void posixc_log_init(enum log_level lowest, bool nonblock, FILE* file){
     log_lowest = lowest;
-    nonblocking = nonblocking;
-    logfile = posixc_fopen(filename,"a");
+    log_nonblock = nonblock;
+    log_file = file;
 }
 
-static void nonblocking_log(const int level, const char *fmt, va_list args) {
-    if (level < log_threshold) return;
-    //todo!
-    
+void posixc_log_init_with_stderr(enum log_level lowest, bool nonblock){
+    posixc_log_init(lowest, nonblock, stderr);
 }
 
-static void blocking_log(const int level, const char *fmt, va_list args) {
-    if (level < log_threshold) return;
-    pthread_mutex_lock(&mtx);
+void posixc_log_init_with_stdout(enum log_level lowest, bool nonblock){
+    posixc_log_init(lowest, nonblock, stdout);
+}
+
+void posixc_log_init_with_filename(enum log_level lowest, bool nonblock, const char* fname){
+    posixc_log_init(lowest, nonblock, posixc_fopen(fname,"a"));
+}
+
+static void async_log(const int level, const char *fmt, va_list args){
+
+}
+
+static void sync_log(const int level, const char *fmt, va_list args){
     switch (level) {
         case LOG_LEVEL_DEBUG:
-            fprintf(logfile, "DEBUG: ");
+            fprintf(log_file, "DEBUG: ");
             break;
         case LOG_LEVEL_INFO:
-            fprintf(logfile, "INFO: ");
+            fprintf(log_file, "INFO: ");
             break;
         case LOG_LEVEL_WARN:
-            fprintf(logfile, "WARN: ");
+            fprintf(log_file, "WARN: ");
             break;
         case LOG_LEVEL_ERR:
-            fprintf(logfile, "ERR: "); 
+            fprintf(log_file, "ERR: "); 
             break;
         case LOG_LEVEL_FATAL:
-            fprintf(logfile, "FATAL: "); 
+            fprintf(log_file, "FATAL: "); 
             break;
     }
-    vfprintf(logfile, fmt, args);
-    fprintf(logfile, "\n");
-    pthread_mutex_unlock(&mtx);
+    vfprintf(log_file, fmt, args);
+    fprintf(log_file, "\n");
+}
+
+
+static void log(const int level, const char *fmt, va_list args) {
+    if (level < log_lowest) return;
+    pthread_mutex_lock(&log_mtx);
+    if(log_nonblock){
+        async_log(level, fmt, args);
+    }else{
+        sync_log(level, fmt, args);
+    }
+    pthread_mutex_unlock(&log_mtx);
 }
 
 void posixc_log(const int level, const char *fmt, ...) {
     va_list args;
     va_start(args, fmt);
-    if(nonblocking){
-        nonblocking_log(level, fmt, args);
-    }else{
-        blocking_log(level, fmt, args);
-    }
+    log(level, fmt, args);
     va_end(args);
 }
 

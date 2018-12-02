@@ -5,32 +5,33 @@
 
 static enum posixc_log_level        log_lowest = LOG_LEVEL_ERR;
 static pthread_mutex_t              log_mtx;
-static bool                         log_nonblock = false;
-static FILE*                        log_file;
+static FILE*                        log_file = stderr;
 
-void posixc_log_init(enum log_level lowest, bool nonblock, FILE* file){
+void posixc_log_init(enum log_level lowest, FILE* file){
     log_lowest = lowest;
-    log_nonblock = nonblock;
     log_file = file;
 }
 
-void posixc_log_init_with_stderr(enum log_level lowest, bool nonblock){
-    posixc_log_init(lowest, nonblock, stderr);
+void posixc_log_close(){
+    if(log_file!=stderr && log_file!=stdout) fclose(log_file);
+    log_file=NULL;
 }
 
-void posixc_log_init_with_stdout(enum log_level lowest, bool nonblock){
-    posixc_log_init(lowest, nonblock, stdout);
+void posixc_log_init_with_stderr(enum log_level lowest){
+    posixc_log_init(lowest, stderr);
 }
 
-void posixc_log_init_with_filename(enum log_level lowest, bool nonblock, const char* fname){
-    posixc_log_init(lowest, nonblock, posixc_fopen(fname,"a"));
+void posixc_log_init_with_stdout(enum log_level lowest){
+    posixc_log_init(lowest, stdout);
 }
 
-static void async_log(const int level, const char *fmt, va_list args){
-
+void posixc_log_init_with_filename(enum log_level lowest, const char* fname){
+    posixc_log_init(lowest, posixc_fopen(fname,"a"));
 }
 
-static void sync_log(const int level, const char *fmt, va_list args){
+static void log(const int level, const char *fmt, va_list args) {
+    if (level < log_lowest) return;
+    pthread_mutex_lock(&log_mtx);
     switch (level) {
         case LOG_LEVEL_DEBUG:
             fprintf(log_file, "DEBUG: ");
@@ -50,21 +51,11 @@ static void sync_log(const int level, const char *fmt, va_list args){
     }
     vfprintf(log_file, fmt, args);
     fprintf(log_file, "\n");
-}
-
-
-static void log(const int level, const char *fmt, va_list args) {
-    if (level < log_lowest) return;
-    pthread_mutex_lock(&log_mtx);
-    if(log_nonblock){
-        async_log(level, fmt, args);
-    }else{
-        sync_log(level, fmt, args);
-    }
     pthread_mutex_unlock(&log_mtx);
 }
 
 void posixc_log(const int level, const char *fmt, ...) {
+    if(!log_file) return;
     va_list args;
     va_start(args, fmt);
     log(level, fmt, args);

@@ -12,6 +12,12 @@ enum log_level {
     LOG_LEVEL_NUMBER = 6
 };
 
+typedef struct{
+    enum log_level lowest;
+    pthread_mutex_t mtx;
+    FILE* file;
+}posixc_logger;
+
 void posixc_log_init(posixc_logger* logger, enum log_level lowest, FILE* file);
 void posixc_log_close(posixc_logger* logger);
 void posixc_log_init_with_stderr(posixc_logger* logger, enum log_level lowest);

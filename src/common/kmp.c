@@ -1,13 +1,13 @@
 #include "kmp.h"
 
 typedef struct {
-  size_t *P;
+  size_t *P; 
   size_t len;
   const char * str;
 } kmp_prefix;
 
 
-void F(const char *str, size_t len, kmp_prefix* prefix) {
+void kmp_failure(const char *str, size_t len, kmp_prefix* prefix) {
     size_t *P = prefix->P;
     size_t i = 1;
     size_t j = P[0] = 0; // longest prefix length
@@ -22,7 +22,6 @@ void F(const char *str, size_t len, kmp_prefix* prefix) {
         P[i] = j;
     }
 }
-
 
 int kmp_prefix_search(const char *text, size_t text_len, kmp_prefix *prefix)
 {
@@ -51,7 +50,7 @@ const char* posixc_kmp_contains(const char *text, size_t text_len, const char *n
     prefix.P = P;
     prefix.str = needle;
     prefix.len = needle_len;
-    F(needle, needle_len, &prefix);
+    kmp_failure(needle, needle_len, &prefix);
     int rv = kmp_prefix_search(text, text_len, &prefix);
     if(rv==-1) return NULL;
     return text+rv;

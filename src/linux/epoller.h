@@ -2,6 +2,11 @@
 
 #include "internal.h"
 
+typedef struct{
+    int                     fd;
+    struct epoll_event      events[max_nr_epoll_events];
+}posixc_epoller;
+
 // posixc_epoller is configured to use "oneshot mode", as it is supposed to be handled only once
 // in an event-driven system. 
 

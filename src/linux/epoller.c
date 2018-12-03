@@ -6,11 +6,6 @@
 
 #define max_nr_epoll_events 32
 
-struct epoller{
-    int                     fd;
-    struct epoll_event      events[max_nr_epoll_events];
-};
-
 int posixc_epoller_init(posixc_epoller* epoller){
     epoller->fd = epoll_create1(EPOLL_CLOEXEC);
     if(epoller->fd<0) return -1;

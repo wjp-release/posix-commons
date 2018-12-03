@@ -3,14 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-struct posixc_boyermoore{
-    size_t      alpha_skip_lookup[256];
-    size_t*     find_skip_lookup;
-    bool        case_sensitive;
-    const char* query;
-    size_t      query_len;
-};
-
 bool is_prefix(const char *s, const size_t s_len, const size_t pos, const bool case_sensitive) {
     size_t i;
     for (i = 0; pos + i < s_len; i++) {

@@ -4,12 +4,6 @@
 #include "log.h"
 #include "fileio.h"
 
-struct posixc_logger{
-    enum log_level lowest;
-    pthread_mutex_t mtx;
-    FILE* file;
-};
-
 void posixc_log_init(posixc_logger* logger, enum log_level lowest, FILE* file){
     logger->lowest = lowest;
     logger->file = file;

@@ -6,10 +6,12 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <string.h> 
+#include <unistd.h>
 
-typedef struct posixc_slice        posixc_slice;
-typedef struct posixc_boyermoore   posixc_boyermoore;
-typedef struct posixc_logger       posixc_logger;
-#ifdef __linux__
-typedef struct posixc_epoller      posixc_epoller;
-#endif
+// invisible/ABI-irrelevant structures 
+
+typedef struct posixc_reactor posixc_reactor;
+typedef struct posixc_event posixc_event;
+typedef void (*posixc_event_cb)(posixc_event*, int, void *);

@@ -2,63 +2,65 @@
 #include <stdio.h>
 #include <pthread.h>
 #include "log.h"
+#include "fileio.h"
 
-static enum posixc_log_level        log_lowest = LOG_LEVEL_ERR;
-static pthread_mutex_t              log_mtx;
-static FILE*                        log_file = stderr;
+struct posixc_logger{
+    enum log_level lowest;
+    pthread_mutex_t mtx;
+    FILE* file;
+};
 
-void posixc_log_init(enum log_level lowest, FILE* file){
-    log_lowest = lowest;
-    log_file = file;
+void posixc_log_init(posixc_logger* logger, enum log_level lowest, FILE* file){
+    logger->lowest = lowest;
+    logger->file = file;
 }
 
-void posixc_log_close(){
-    if(log_file!=stderr && log_file!=stdout) fclose(log_file);
-    log_file=NULL;
+void posixc_log_close(posixc_logger* logger){
+    if(logger->file!=stderr && logger->file!=stdout) fclose(logger->file);
 }
 
-void posixc_log_init_with_stderr(enum log_level lowest){
-    posixc_log_init(lowest, stderr);
+void posixc_log_init_with_stderr(posixc_logger* logger, enum log_level lowest){
+    posixc_log_init(logger, lowest, stderr);
 }
 
-void posixc_log_init_with_stdout(enum log_level lowest){
-    posixc_log_init(lowest, stdout);
+void posixc_log_init_with_stdout(posixc_logger* logger, enum log_level lowest){
+    posixc_log_init(logger, lowest, stdout);
 }
 
-void posixc_log_init_with_filename(enum log_level lowest, const char* fname){
-    posixc_log_init(lowest, posixc_fopen(fname,"a"));
+void posixc_log_init_with_filename(posixc_logger* logger, enum log_level lowest, const char* fname){
+    posixc_log_init(logger, lowest, posixc_fopen(fname,"a"));
 }
 
-static void log(const int level, const char *fmt, va_list args) {
-    if (level < log_lowest) return;
-    pthread_mutex_lock(&log_mtx);
+static void log(posixc_logger* logger, const int level, const char *fmt, va_list args) {
+    if (level < (int) logger->lowest) return;
+    pthread_mutex_lock(&logger->mtx);
     switch (level) {
         case LOG_LEVEL_DEBUG:
-            fprintf(log_file, "DEBUG: ");
+            fprintf(logger->file, "DEBUG: ");
             break;
         case LOG_LEVEL_INFO:
-            fprintf(log_file, "INFO: ");
+            fprintf(logger->file, "INFO: ");
             break;
         case LOG_LEVEL_WARN:
-            fprintf(log_file, "WARN: ");
+            fprintf(logger->file, "WARN: ");
             break;
         case LOG_LEVEL_ERR:
-            fprintf(log_file, "ERR: "); 
+            fprintf(logger->file, "ERR: "); 
             break;
         case LOG_LEVEL_FATAL:
-            fprintf(log_file, "FATAL: "); 
+            fprintf(logger->file, "FATAL: "); 
             break;
     }
-    vfprintf(log_file, fmt, args);
-    fprintf(log_file, "\n");
-    pthread_mutex_unlock(&log_mtx);
+    vfprintf(logger->file, fmt, args);
+    fprintf(logger->file, "\n");
+    pthread_mutex_unlock(&logger->mtx);
 }
 
-void posixc_log(const int level, const char *fmt, ...) {
-    if(!log_file) return;
+void posixc_log(posixc_logger* logger, const int level, const char *fmt, ...) {
+    if(!logger->file) return;
     va_list args;
     va_start(args, fmt);
-    log(level, fmt, args);
+    log(logger, level, fmt, args);
     va_end(args);
 }
 

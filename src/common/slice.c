@@ -1,4 +1,3 @@
-#include "slice.h"
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
@@ -8,20 +7,12 @@
 #include "boyermoore.h"
 #include "kmp.h"
 #include "utils.h"
-
-#define inline_cap 48
-
-//sizeof posixc_slice === 64 bytes === cache line length
-struct posixc_slice{
-    char        inlinebuf[inline_cap];  
-    char*       buf; // points to inline_buf for small strings; malloc()-ed address otherwise
-    uint64_t    size;   
-};
+#include "slice.h"
 
 void posixc_slice_init(posixc_slice*slice, uint64_t size){
     assert(size>0);
     if(size>inline_cap){
-        buf=(char*)malloc(size);
+        slice->buf=(char*)malloc(size);
     }else{
         slice->buf=slice->inlinebuf;
         slice->size=size;
@@ -35,13 +26,13 @@ void posixc_slice_destroy(posixc_slice*slice){
 }
 
 void posixc_slice_init_as_aggregation(posixc_slice* aggregate, posixc_slice** slices, size_t nr_slices){
-    int size=0;
-    for(int i=0;i<nr_slices;i++){
+    size_t size=0;
+    for(size_t i=0;i<nr_slices;i++){
         posixc_slice* current=slices[i];
         size+=current->size;
     }
     posixc_slice_init(aggregate,size);
-    for(int i=0, pos=0;i<nr_slices;i++){
+    for(size_t i=0, pos=0;i<nr_slices;i++){
         posixc_slice* current=slices[i];
         memcpy(aggregate->buf+pos, current->buf, current->size);
         pos+=current->size;
@@ -59,31 +50,33 @@ void posixc_slice_copy(posixc_slice*dst, posixc_slice*src){
     if(dst->size<inline_cap){
         dst->buf=dst->inlinebuf;
     }else{
-        dst->buf=(char*)malloc(size);
+        dst->buf=(char*)malloc(src->size);
     }
     memcpy(dst->buf,src->buf,src->size);
 }
 
 bool posixc_slice_contains(posixc_slice*text, posixc_slice* pattern){
     if(pattern->size<=8){  // kmp works better when the pattern is small
-        return posixc_kmp_conains(text->buf,text->size,pattern->buf,pattern->size);
+        return posixc_kmp_contains(text->buf,text->size,pattern->buf,pattern->size)!=NULL;
     }else{ // boyermoore works better when the pattern and the text resemble "natural text" 
-        return posixc_boyermoore_contains(text->buf,text->size,pattern->buf,pattern->size);
+        return posixc_boyermoore_contains(text->buf,text->size,pattern->buf,pattern->size)!=NULL;
     }
 }
 
-void posixc_slice_append(posixc_slice* text, const char* suffix){
+int posixc_slice_append(posixc_slice* text, const char* suffix){
     int size=strlen(suffix);
-    if(text->buf==text->inline_buf){
+    if(text->buf==text->inlinebuf){
         if(text->size+size>inline_cap){
             text->buf=(char*)malloc(text->size+size);
-            memcpy(text->buf, text->inline_buf, text->size);
+            memcpy(text->buf, text->inlinebuf, text->size);
         }
     }else{
-        realloc(text->buf, text->size+size);
+        text->buf=realloc(text->buf, text->size+size);
+        if(text->buf==NULL) return -1;
     }
     memcpy(text->buf+text->size, suffix, size);
     text->size+=size;
+    return 0;
 }
 
 posixc_slice posixc_slice_parse_int(int x){

@@ -1,7 +1,7 @@
 set (POSIXC_TEST_PORT 13000)
 macro (wjptest_tmo NAME TIMEOUT)
     add_executable (${NAME} ${NAME}.c)
-    target_link_libraries (${NAME} posix_commons)
+    target_link_libraries (${NAME} posixc)
     add_test (NAME ${NAME} COMMAND ${NAME} -v -p TEST_PORT=${POSIXC_TEST_PORT})
     math (EXPR TIMEOUT ${TIMEOUT}*${TIMEOUT_FACTOR})
     set_tests_properties (${NAME} PROPERTIES TIMEOUT ${TIMEOUT})
@@ -10,8 +10,10 @@ endmacro (wjptest_tmo)
 
 macro (wjptest NAME)
     add_executable (${NAME} ${NAME}.c)
-    target_link_libraries (${NAME} posix_commons)
+    target_link_libraries (${NAME} posixc)
     add_test (NAME ${NAME} COMMAND ${NAME} -v -p TEST_PORT=${POSIXC_TEST_PORT})
     math (EXPR POSIXC_TEST_PORT "${POSIXC_TEST_PORT}+20")
 endmacro (wjptest)
+
+wjptest(slice_test)
 

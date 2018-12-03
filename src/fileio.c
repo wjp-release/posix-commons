@@ -4,6 +4,8 @@
 #include <sys/resource.h>   // getrlimit 
 #include <sys/stat.h>       // stat, S_ISREG
 #include <unistd.h>         // read, open, write, close, lseek, pread
+#include <assert.h>
+#include <string.h>
 
 int posixc_fd_limit()
 {
@@ -58,12 +60,12 @@ int posixc_delete_file(const char* fname){
     return unlink(fname);
 }
 
-void posixc_rename_file(const char* src, const char* target){
+int posixc_rename_file(const char* src, const char* target){
     return rename(src, target);
 }   
 
 bool posixc_dir_exists(const char* dir){
-    DIR* tmp=opendir(dir)
+    DIR* tmp=opendir(dir);
     if(tmp){
         closedir(tmp);
         return true;
@@ -76,7 +78,7 @@ bool posixc_dir_exists(const char* dir){
 void posixc_recursive_mkdir(const char *dir) {
     char tmp[tmp_cap];
     snprintf(tmp, sizeof(tmp),"%s",dir);
-    size_t len = strlen(tmp);
+    size_t len = (size_t) strlen(tmp);
     assert(len<=tmp_cap);
     if(tmp[len-1] == '/') tmp[len-1] = 0;
     for(char* p=tmp+1; *p; p++){
@@ -91,7 +93,7 @@ void posixc_recursive_mkdir(const char *dir) {
 
 void posixc_prepare_dirs_for(const char* filename){
     char tmp[tmp_cap];
-    snprintf(tmp, sizeof(tmp),"%s",dir);
+    snprintf(tmp, sizeof(tmp),"%s",filename);
     size_t len = strlen(tmp);
     assert(len<=tmp_cap);
     char*t = tmp+len-1; 

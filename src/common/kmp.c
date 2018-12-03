@@ -28,9 +28,9 @@ int kmp_prefix_search(const char *text, size_t text_len, kmp_prefix *prefix)
 {
     const char *needle = prefix->str;
     const size_t needle_len = prefix->len;
-    uint32_t *P = prefix->P;
-    uint32_t j = 0;
-    for (uint32_t i = 0; i < text_len ; i++) {
+    size_t *P = prefix->P;
+    size_t j = 0;
+    for (size_t i = 0; i < text_len ; i++) {
         while (j > 0 && text[i] != needle[j]) {
             j = P[j+1];
         }
@@ -44,13 +44,15 @@ int kmp_prefix_search(const char *text, size_t text_len, kmp_prefix *prefix)
     return -1;
 }
 
-int posixc_kmp_contains(const char *text, size_t text_len, const char *needle, size_t needle_len)
+const char* posixc_kmp_contains(const char *text, size_t text_len, const char *needle, size_t needle_len)
 {
-    uint32_t P[needle_len];
+    size_t P[needle_len];
     kmp_prefix prefix;
     prefix.P = P;
     prefix.str = needle;
     prefix.len = needle_len;
     F(needle, needle_len, &prefix);
-    return kmp_prefix_search(text, text_len, &prefix);
+    int rv = kmp_prefix_search(text, text_len, &prefix);
+    if(rv==-1) return NULL;
+    return text+rv;
 }

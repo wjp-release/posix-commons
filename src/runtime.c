@@ -1,4 +1,5 @@
 #include "runtime.h"
+ #include <unistd.h>
 
 int posixc_nr_cpus(){
     return sysconf(_SC_NPROCESSORS_ONLN);
@@ -25,5 +26,9 @@ int posixc_nr_pages(){
 }
 
 int posixc_nr_pages_available(){
+    #ifdef _SC_AVPHYS_PAGES
     return sysconf(_SC_AVPHYS_PAGES);
+    #else
+    return sysconf(_SC_PHYS_PAGES);
+    #endif
 }

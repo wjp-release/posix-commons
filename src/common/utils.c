@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 static char regex_chars[] = {'$','(',')','*','+','.','?','[','\\','^','{','|','\0'};
 
@@ -13,9 +14,9 @@ int posixc_binary_search(const char *needle, char **haystack, int start, int end
     int mid = start + ((end - start) / 2);
     int rc = strcmp(needle, haystack[mid]);
     if (rc < 0) {
-        return binary_search(needle, haystack, start, mid);
+        return posixc_binary_search(needle, haystack, start, mid);
     } else if (rc > 0) {
-        return binary_search(needle, haystack, mid + 1, end);
+        return posixc_binary_search(needle, haystack, mid + 1, end);
     }
     return mid;
 }
@@ -30,8 +31,7 @@ bool posixc_is_lowercase(const char *s) {
     return true;
 }
 
-void posixc_reverse(char *str, int len) 
-{ 
+void posixc_reverse(char *str, int len){ 
     int i=0, j=len-1, temp; 
     while (i<j) { 
         temp = str[i]; 
@@ -41,8 +41,7 @@ void posixc_reverse(char *str, int len)
     } 
 } 
 
-int posixc_itoa(int x, char* str);
-{ 
+int posixc_itoa(int x, char* str){ 
     int i = 0; 
     while (x) { 
         str[i++] = (x%10) + '0'; 
@@ -53,8 +52,7 @@ int posixc_itoa(int x, char* str);
     return i; 
 } 
 
-int posixc_itoa_padding_zeros(int x, char* str, int d);
-{ 
+int posixc_itoa_padding_zeros(int x, char* str, int d){ 
     int i = 0; 
     while (x) { 
         str[i++] = (x%10) + '0'; 
@@ -66,8 +64,7 @@ int posixc_itoa_padding_zeros(int x, char* str, int d);
     return i; 
 } 
 
-int posixc_ftoa(float n, char *res, int afterpoint) 
-{ 
+int posixc_ftoa(float n, char *res, int afterpoint){ 
     int ipart = (int)n;  
     float fpart = n - (float)ipart;  
     int i = posixc_itoa(ipart, res); 
@@ -80,8 +77,7 @@ int posixc_ftoa(float n, char *res, int afterpoint)
     return i+afterpoint+1;
 } 
 
-int posixc_ftoa_within_given_bytes(float n, char *res, int afterpoint, int maxbytes) 
-{ 
+int posixc_ftoa_within_given_bytes(float n, char *res, int afterpoint, int maxbytes){ 
     int ipart = (int)n;  
     float fpart = n - (float)ipart;  
     int i = posixc_itoa(ipart, res); 
@@ -96,8 +92,7 @@ int posixc_ftoa_within_given_bytes(float n, char *res, int afterpoint, int maxby
 } 
 
 
-int posixc_dtoa(double n, char *res, int afterpoint) 
-{ 
+int posixc_dtoa(double n, char *res, int afterpoint){ 
     int ipart = (int)n;  
     double dpart = n - (double)ipart;  
     int i = posixc_itoa(ipart, res); 
@@ -110,8 +105,7 @@ int posixc_dtoa(double n, char *res, int afterpoint)
     return i+afterpoint+1;
 } 
 
-int posixc_dtoa_within_given_bytes(double n, char *res, int afterpoint, int maxbytes) 
-{ 
+int posixc_dtoa_within_given_bytes(double n, char *res, int afterpoint, int maxbytes){ 
     int ipart = (int)n;  
     double dpart = n - (double)ipart;  
     int i = posixc_itoa(ipart, res); 

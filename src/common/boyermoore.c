@@ -79,7 +79,7 @@ void generate_alpha_skip(const char *find, size_t f_len, size_t skip_lookup[], c
     }
 }
 
-void posixc_boyermoore_init(posixc_boyermoore* boyermoore, char* query, size_t query_len, bool case_sensitive){
+void posixc_boyermoore_init(posixc_boyermoore* boyermoore, const char* query, size_t query_len, bool case_sensitive){
     boyermoore->query=query;
     boyermoore->query_len=query_len;
     boyermoore->case_sensitive=case_sensitive;
@@ -89,7 +89,7 @@ void posixc_boyermoore_init(posixc_boyermoore* boyermoore, char* query, size_t q
 
 const char* posixc_boyermoore_search_in(posixc_boyermoore* boyermoore, const char* text, size_t text_len){
     size_t pos = boyermoore->query_len - 1;
-    while (pos < s_len) {
+    while (pos < text_len) {
         ssize_t i = boyermoore->query_len - 1;
         for (;i >= 0 && (boyermoore->case_sensitive?text[pos]:tolower(text[pos]))==boyermoore->query[i]; pos--, i--);
         if (i < 0) return text + pos + 1;

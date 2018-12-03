@@ -2,7 +2,7 @@
 
 #include "internal.h"
 
-enum posixc_log_level {
+enum log_level {
     LOG_LEVEL_DEBUG = 0,
     LOG_LEVEL_INFO  = 1,
     LOG_LEVEL_WARN  = 2,
@@ -12,9 +12,9 @@ enum posixc_log_level {
     LOG_LEVEL_NUMBER = 6
 };
 
-void posixc_log_init(enum log_level lowest, FILE* file);
-void posixc_log_close();
-void posixc_log_init_with_stderr(enum log_level lowest);
-void posixc_log_init_with_stdout(enum log_level lowest);
-void posixc_log_init_with_filename(enum log_level lowest, const char* fname);
-void posixc_log(const unsigned int level, const char *fmt, ...);
+void posixc_log_init(posixc_logger* logger, enum log_level lowest, FILE* file);
+void posixc_log_close(posixc_logger* logger);
+void posixc_log_init_with_stderr(posixc_logger* logger, enum log_level lowest);
+void posixc_log_init_with_stdout(posixc_logger* logger, enum log_level lowest);
+void posixc_log_init_with_filename(posixc_logger* logger, enum log_level lowest, const char* fname);
+void posixc_log(posixc_logger* logger, const int level, const char *fmt, ...);

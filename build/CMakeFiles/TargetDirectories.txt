@@ -1,0 +1,14 @@
+/Users/wjp/Desktop/workspace/posix-commons/build/CMakeFiles/rebuild_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/CMakeFiles/edit_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/CMakeFiles/rebuild_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/CMakeFiles/edit_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/CMakeFiles/posixc.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/common/CMakeFiles/rebuild_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/common/CMakeFiles/edit_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/common/CMakeFiles/posixc_common.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/mac/CMakeFiles/rebuild_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/mac/CMakeFiles/edit_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/src/mac/CMakeFiles/posixc_mac.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/rebuild_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/edit_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/slice_test.dir

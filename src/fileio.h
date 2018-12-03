@@ -10,7 +10,7 @@ int     posixc_create_dir(const char* dir);
 int     posixc_delete_dir(const char* dir);
 bool    posixc_file_exists(const char* fname);
 int     posixc_delete_file(const char* fname);
-void    posixc_rename_file(const char* src, const char* target);
+int     posixc_rename_file(const char* src, const char* target);
 void    posixc_recursive_mkdir(const char *dir);
 void    posixc_prepare_dirs_for(const char* filename); // creates dirs if they don't exist
 FILE*   posixc_fopen(const char* filename, const char *mode); 

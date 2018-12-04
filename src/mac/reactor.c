@@ -7,5 +7,7 @@
 struct posixc_reactor{
 	pthread_mutex_t  mtx;
 	pthread_t        thread;   
-    int              kq;    
+    int              kq;   
+	list_head        gc_events; 
 };
+

@@ -2,11 +2,25 @@
 
 #include "internal.h"
 
+struct posixc_event;
+
+typedef struct posixc_reactor{
+	pthread_mutex_t  mtx;
+	pthread_t        thread;   
+    int              id;  //native id, epfd or kq   
+	list_head        gc_events; 
+	bool 			 closing;
+}posixc_reactor;
+
+
 // kqueue identifier or epoll fd.
-int posixc_reactor_getid(posixc_reactor* r);
-
-pthread_t posixc_reactor_getpthread(posixc_reactor* r);
-
+// API 
 posixc_reactor* posixc_reactor_create();
-
+// API 
 void posixc_reactor_destroy(posixc_reactor* r);
+// impl
+void posixc_reactor_gc(posixc_reactor*r);
+
+// platform specific impl functions
+void* posixc_reactor_plat_threadfn(void*arg);
+int posixc_reactor_plat_create();

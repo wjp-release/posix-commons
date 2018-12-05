@@ -1,25 +1,44 @@
 #pragma once
 #include "internal.h"
-
-#include <fcntl.h>
-#include <sys/event.h>
-#include <sys/socket.h>
+#include "list.h"
 
 #define POSIXC_EVENT_IN 0x0001
 #define POSIXC_EVENT_OUT 0x0004
+#define POSIXC_EVENT_ERR 0x0010
+// platform-independent
 
-posixc_event* posixc_event_create(posixc_reactor* r int fd, posixc_event_cb cb, void* arg);
+struct posixc_reactor;
+
+typedef struct posixc_event{
+    posixc_reactor* reactor;
+    int             fd;
+    posixc_event_cb cb;
+    void*           arg;
+    int             evmask;
+    bool            closing; 
+    pthread_mutex_t mtx;
+    list_node       node;
+}posixc_event;
+
+typedef void (*posixc_event_cb)(posixc_event*, int, void *);
+
+
+// APIs
+
+posixc_event* posixc_event_create(posixc_reactor* r, int fd, posixc_event_cb cb, void* arg);
 
 void posixc_event_destroy(posixc_event*e);
 
 bool posixc_event_submit(posixc_event* e, int evmask);
 
-int posixc_event_getfd(posixc_event* e);
+void posixc_preparefd(int fd);
 
-// nonblocking, close-on-exec, no sigpipe
-static inline void posixc_preparefd(int fd){
-    fcntl(fd, F_SETFD, FD_CLOEXEC);
-	fcntl(fd, F_SETFL, O_NONBLOCK);
-    int one = 1;
-	setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &one, sizeof(one)); 
-}
+void posixc_event_consume(posixc_event*e, int evmask_to_consume, posixc_event_cb* cb, void** arg);
+
+// platform-specific (epoll or kqueue) impl functions
+
+bool posixc_event_plat_create(posixc_event*e);
+
+bool posixc_event_plat_destroy(posixc_event*e);
+
+bool posixc_event_plat_submit(posixc_event*e);

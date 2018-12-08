@@ -5,10 +5,10 @@
 
 int posixc_efd_open()
 {
-    int fd;
-    qerror_if(fd=eventfd(0, EFD_CLOEXEC)<0, "cannot create eventfd");
+    int fd=eventfd(0, EFD_CLOEXEC);
     fcntl(fd, F_SETFD, FD_CLOEXEC);
     fcntl(fd, F_SETFL, O_NONBLOCK);
+    return fd;
 }
 
 void posixc_efd_send(int efd)

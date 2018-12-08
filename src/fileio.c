@@ -115,3 +115,22 @@ FILE* posixc_fopen(const char* filename, const char *mode){
     posixc_prepare_dirs_for(filename);
     return fopen(filename, mode);
 }
+
+bool posixc_stat(struct stat* statbuf, const char* filename){
+    return stat(filename, &statbuf)==0;
+}
+
+bool posixc_is_stale(struct stat* statbuf, int age_seconds){
+    time_t staletime=time(0)-age_seconds;
+    if(statbuf->st_atime<staletime||statbuf->st_ctime<staletime||statbuf->st_mtime<staletime){
+        return false;
+    }
+    return true;
+}
+
+bool posixc_is_user_rwx(struct stat* statbuf){
+    if(statbuf->st_mode & (S_IRWXG | S_IRWXO) || (statbuf->st_mode & S_IRWXU) != S_IRWXU){
+        return false;
+    }
+    return true;
+}

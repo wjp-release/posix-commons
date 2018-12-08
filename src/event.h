@@ -24,7 +24,6 @@ typedef void (*posixc_event_cb)(posixc_event*, int, void *);
 
 
 // APIs
-
 posixc_event* posixc_event_create(posixc_reactor* r, int fd, posixc_event_cb cb, void* arg);
 
 void posixc_event_destroy(posixc_event*e);

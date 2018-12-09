@@ -12,9 +12,32 @@ bool    posixc_file_exists(const char* fname);
 int     posixc_delete_file(const char* fname);
 int     posixc_rename_file(const char* src, const char* target);
 void    posixc_recursive_mkdir(const char *dir);
-void    posixc_prepare_dirs_for(const char* filename); // creates dirs if they don't exist
+// Premake parent directories 
 FILE*   posixc_fopen(const char* filename, const char *mode); 
-
 bool    posixc_stat(struct stat* statbuf, const char* filename);
 bool    posixc_is_stale(struct stat* statbuf, int age_seconds);
 bool    posixc_is_user_rwx(struct stat* statbuf);
+// Retries if interrupted
+bool    posixc_read(int fd, char* buf, ssize_t* read_size, size_t n);
+bool    posixc_skip(int fd, size_t n);
+int     posixc_readonly_open(const char* filename);
+// Premake parent directories 
+int     posixc_writable_open(const char* filename);
+// Premake parent directories 
+int     posixc_appendable_open(const char* filename);
+// Note that random access performance is sub-ideal.
+bool    posixc_pread(int fd, char* buf, ssize_t* read_size, size_t n, uint64_t offset);
+bool    posixc_unbuffered_write(int fd, const char* data, size_t size);
+void    posixc_buffered_writable_init(posixc_buffered_writable* bw, int fd);
+bool    posixc_buffered_write(posixc_buffered_writable* bw, const char* data, size_t size);
+bool    posixc_flush(posixc_buffered_writable* bw);
+bool    posixc_sync(int fd);
+int     posixc_fd_limit();
+
+struct posixc_buffered_writable
+{
+    char buf[buffered_writable_size];
+    size_t pos;
+    int fd;
+};
+

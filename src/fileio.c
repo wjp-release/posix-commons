@@ -6,6 +6,8 @@
 #include <unistd.h>         // read, open, write, close, lseek, pread
 #include <assert.h>
 #include <string.h>
+#include <errno.h>
+#include "common/math.h"
 
 int posixc_fd_limit()
 {
@@ -133,4 +135,93 @@ bool posixc_is_user_rwx(struct stat* statbuf){
         return false;
     }
     return true;
+}
+
+bool posixc_read(int fd, char* buf, ssize_t* read_size, size_t n){
+    while (true) {
+        *read_size = read(fd, buf, n);
+        if (*read_size < 0) {
+            if (errno == EINTR) continue; 
+            return false;
+        }
+        break;
+    }
+    return true;
+}
+
+bool posixc_skip(int fd, size_t n){
+    return lseek(fd_, n, SEEK_CUR) != (off_t) -1;
+}
+
+int posixc_readonly_open(const char* filename){
+    return open(filename, O_RDONLY);
+}
+
+int posixc_writable_open(const char* filename){
+    posixc_prepare_dirs_for(filename);
+    return open(filename, O_TRUNC | O_WRONLY | O_CREAT, 0644);
+}
+
+int posixc_appendable_open(const char* filename){
+    posixc_prepare_dirs_for(filename);
+    return open(filename, O_APPEND | O_WRONLY | O_CREAT, 0644);
+}
+
+bool posixc_pread(int fd, char* buf, ssize_t* read_size, size_t n, uint64_t offset){
+    *read_size = ::pread(fd, buf, n, (off_t)(offset));
+    return *read_size>=0
+}
+
+bool posixc_unbuffered_write(int fd, const char* data, size_t size){
+    while (size > 0) {
+        ssize_t bytes_written=write(fd_, data, size);
+        if (bytes_written < 0) {
+            if (errno == EINTR) continue;  
+            return false;
+        }
+        data += bytes_written;
+        size -= bytes_written;
+    }
+    return true;
+}
+
+bool posixc_flush(posixc_buffered_writable* bw){
+    int size=bw->pos;
+    bw->pos=0;
+    return posixc_unbuffered_write(bw->fd, bw->buf, size);
+}
+void posixc_buffered_writable_init(posixc_buffered_writable* bw, int fd){
+    bw->pos=0;
+    bw->fd=fd;
+}
+
+bool posixc_buffered_write(posixc_buffered_writable* bw, const char* data, size_t size){
+    size_t n = posixc_min(size, buffered_writable_size - bw->pos);
+    memcpy(bw->buf + bw->pos, data, n);
+    data += n;
+    size -= n;
+    bw->pos += n;
+    if (size == 0) return true;
+    if(posixc_flush(bw)){
+        if (size < buffered_writable_size) {
+            memcpy(bw->buf, data, size);
+            bw->pos = size;
+            return true;
+        }
+        return posixc_unbuffered_write(bw->fd, data, size);
+    }
+    return false;
+}
+
+bool posixc_sync(int fd){
+    return fdatasync(fd)==0;
+}
+
+int posixc_fd_limit(){
+    struct rlimit rlim;
+    if(getrlimit(RLIMIT_NOFILE, &rlim)==-1){
+        return -1;
+    }
+    if(rlim.rlim_cur == RLIM_INFINITY) return INT_MAX;
+    return rlim.rlim_cur;
 }

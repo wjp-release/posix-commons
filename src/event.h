@@ -9,7 +9,7 @@
 
 struct posixc_reactor;
 
-typedef struct posixc_event{
+struct posixc_event{
     posixc_reactor* reactor;
     int             fd;
     posixc_event_cb cb;
@@ -18,7 +18,7 @@ typedef struct posixc_event{
     bool            closing; 
     pthread_mutex_t mtx;
     list_node       node;
-}posixc_event;
+};
 
 typedef void (*posixc_event_cb)(posixc_event*, int, void *);
 

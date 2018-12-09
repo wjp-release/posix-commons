@@ -5,11 +5,11 @@
 #define inline_cap 48
 
 //sizeof posixc_slice === 64 bytes === cache line length
-typedef struct{
+struct posixc_slice{
     char        inlinebuf[inline_cap];  
     char*       buf; // points to inline_buf for small strings; malloc()-ed address otherwise
     uint64_t    size;   
-}posixc_slice;
+};
 
 void posixc_slice_init(posixc_slice*slice, uint64_t size);
 void posixc_slice_destroy(posixc_slice*slice);

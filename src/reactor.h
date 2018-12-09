@@ -2,16 +2,13 @@
 
 #include "internal.h"
 
-struct posixc_event;
-
-typedef struct posixc_reactor{
+struct posixc_reactor{
 	pthread_mutex_t  mtx;
 	pthread_t        thread;   
     int              id;  //native id, epfd or kq   
 	list_head        gc_events; 
 	bool 			 closing;
-}posixc_reactor;
-
+};
 
 // kqueue identifier or epoll fd.
 // API 

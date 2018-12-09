@@ -1,0 +1,6 @@
+kqueue在不指定timeout的默认情况下是永久阻塞的，相当于epoll里的timeout设为-1。
+这种模式显然比设置timeout提前唤醒更好。如果需要计时器，额外设置即可。
+
+kqueue可以实现与epoll的oneshot几乎相同的行为，不过并不需要EV_ONESHOT，而是在创建时EV_DISABLE，提交时EV_DISPATCH。EV_ONESHOT会在触发后删掉事件，EV_ONESHOT才是触发后disable事件。显然后者更符合epoll里的oneshot（因为oneshot只是为了避免事件驱动系统里被多个工作线程处理相同事件，以后还要再提交这个事件，并不需要真正destroy它）。
+
+

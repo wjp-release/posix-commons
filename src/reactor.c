@@ -1,7 +1,7 @@
 #include <fcntl.h>
 #include <sys/event.h>
 #include <sys/socket.h>
-
+#include <pthread.h>
 #include "event.h"
 #include "reactor.h"
 
@@ -21,7 +21,7 @@ posixc_reactor* posixc_reactor_create(){
 	reactor->id=fd;
 	reactor->closing=false;
 	INIT_LIST_HEAD(&reactor->gc_events);
-	pthread_mutex_init(&reactor->mtx);
+	pthread_mutex_init(&reactor->mtx,NULL);
 	int rv=pthread_create(&reactor->thread, NULL, posixc_reactor_plat_threadfn, reactor);
 	if(rv!=0)return NULL;
 	return reactor;

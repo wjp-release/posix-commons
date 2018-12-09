@@ -31,8 +31,6 @@ bool    posixc_unbuffered_write(int fd, const char* data, size_t size);
 void    posixc_buffered_writable_init(posixc_buffered_writable* bw, int fd);
 bool    posixc_buffered_write(posixc_buffered_writable* bw, const char* data, size_t size);
 bool    posixc_flush(posixc_buffered_writable* bw);
-bool    posixc_sync(int fd);
-int     posixc_fd_limit();
 
 struct posixc_buffered_writable
 {

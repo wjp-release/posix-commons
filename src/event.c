@@ -13,7 +13,7 @@ void posixc_preparefd(int fd){
 	setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &one, sizeof(one)); 
 }
 
-static void posixc_event_init(posixc_event*event, posixc_reactor* reactor, int fd, posixc_event_cb cb, void* arg){
+static void posixc_event_init(posixc_event*event, posixc_reactor* reactor, int fd, posixc_event_cb cb, void* arg,uint8_t type){
     posixc_preparefd(fd);
     event->reactor=reactor;
     event->fd=fd;
@@ -21,6 +21,9 @@ static void posixc_event_init(posixc_event*event, posixc_reactor* reactor, int f
     event->arg=arg;
     event->evmask=0;
     event->closing=false;
+    event->type=type;
+    event->data_1=0;
+    event->data_2=0;
     pthread_mutex_init(&event->mtx, NULL);
     INIT_LIST_HEAD(&event->node);
 }
@@ -31,10 +34,10 @@ static void posixc_event_release(posixc_event*event){
     free(event);
 }
 
-posixc_event* posixc_event_create(posixc_reactor* reactor, int fd, posixc_event_cb cb, void* arg){
+posixc_event* posixc_event_create(posixc_reactor* reactor, int fd, posixc_event_cb cb, void* arg, uint8_t type){
     posixc_event* event=(posixc_event*)malloc(sizeof(posixc_event));
     if(event==NULL) return NULL;
-    posixc_event_init(event,reactor,fd,cb,arg);
+    posixc_event_init(event,reactor,fd,cb,arg,type);
     if(posixc_event_plat_create(event)){
          return event;
     }else{
@@ -72,4 +75,9 @@ void posixc_event_consume(posixc_event*e, int evmask_to_consume, posixc_event_cb
     *cb=e->cb;
     *arg=e->arg;
     pthread_mutex_unlock(&e->mtx);
+}
+
+void posixc_timer_event_set_interval(posixc_event*e, int ms_interval, bool is_periodic){
+    e->data_1=is_periodic? POSIXC_TIMER_PERIODIC:POSIXC_TIMER_ONESHOT;
+    e->data_2=(uint64_t)ms_interval;
 }

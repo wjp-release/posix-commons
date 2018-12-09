@@ -22,7 +22,7 @@ static void set_sockaddr_un(struct sockaddr_un* addr, const char* usockpath){
 
 // Note that: this function returns a dgram socket fd that's already capable of receiving datagrams from peers. It can't distinguish senders without reading datagrams though. 
 int posixc_ipc_dgram_socket(const char* usockpath){
-    int fd = socket(AF_UNIX, SOCK_DGRAM|SOCK_CLOEXEC, 0);
+    int fd = socket(AF_UNIX, SOCK_DGRAM, 0);
     if(fd==-1) return -1;
     struct sockaddr_un addr;
     set_sockaddr_un(&addr, usockpath); 
@@ -34,7 +34,7 @@ int posixc_ipc_dgram_socket(const char* usockpath){
 
 // This function has no access to all usockpaths created by the application. Therefore it just create a temporary probe that attempts to connect this unix domain socket. It could generate false positives.
 bool posixc_ipc_usockpath_already_used(const char* usockpath){
-    int fd=socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
+    int fd=socket(AF_UNIX, SOCK_STREAM, 0);
     struct sockaddr_un addr;
     memset(&addr, 0, sizeof(addr));
     addr.sun_family = AF_UNIX;
@@ -50,7 +50,7 @@ bool posixc_ipc_usockpath_already_used(const char* usockpath){
 
 // This socket has binded and listened. The next step is to put it into a reactor and set up a do-accept event handler. Or you can simply call accept on blocking mode.
 int posixc_ipc_nonblock_stream_socket(const char* usockpath){
-    int fd=socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC, 0);
+    int fd=socket(AF_UNIX, SOCK_STREAM, 0);
     if(fd==-1) return -1;
     struct sockaddr_un addr;
     set_sockaddr_un(&addr, usockpath);
@@ -73,7 +73,7 @@ bool posixc_ipc_getuid(const char* usockpath, uid_t* uid, int age_of_usockpath_s
     if(S_ISSOCK(statbuf.st_mode)==0) return false;
     #endif
     //not rwx
-    if(posixc_is_user_rwx(&statbuf) && !posixc_is_stale(&statbuf)){
+    if(posixc_is_user_rwx(&statbuf) && !posixc_is_stale(&statbuf, age_of_usockpath_sec)){
         *uid=statbuf.st_uid;
         return true;
     }

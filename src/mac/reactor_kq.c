@@ -11,7 +11,8 @@
 #define max_events 64
 #define loops_per_gc 128
 
-static void consume_epollev(const struct kevent* ev){
+static void consume_ev(const struct kevent* ev){
+	printf("consume ev");
     int evmask_to_consume=0;
     switch(ev->filter){
     case EVFILT_READ:
@@ -20,6 +21,15 @@ static void consume_epollev(const struct kevent* ev){
     case EVFILT_WRITE:
         evmask_to_consume=POSIXC_EVENT_OUT;
         break;
+	case EVFILT_SIGNAL:
+		evmask_to_consume=POSIXC_EVENT_SIG;
+		break;
+	case EVFILT_TIMER:
+		evmask_to_consume=0;//not consume timer events as they are periodic
+		break;
+	case EVFILT_USER:
+		evmask_to_consume=POSIXC_EVENT_USER;
+		break;
     default:
         return;
     }
@@ -36,10 +46,11 @@ void* posixc_reactor_plat_threadfn(void*arg){
 	for(unsigned i=0; !reactor->closing;i++){
 		struct kevent events[max_events];
 		int n = kevent(reactor->id,NULL,0,events,max_events,NULL);
+		printf("%d\n",n);
 		if(n<0 && errno==EBADF) return NULL;
 		for(int j=0; j<n; j++){
 			const struct kevent* ev=&events[i];
-			consume_epollev(ev);
+			consume_ev(ev);
 		}
 		if(i%loops_per_gc == 0) posixc_reactor_gc(reactor);
 	}

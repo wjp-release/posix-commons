@@ -10,6 +10,7 @@
 #include <string.h> 
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 typedef struct posixc_asynclogsvr posixc_asynclogsvr;
 typedef struct posixc_buffered_writable posixc_buffered_writable;

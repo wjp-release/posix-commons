@@ -1,13 +1,13 @@
 #include "fileio.h"
+#include "common/math.h"
 #include <fcntl.h>          // fcntl, posix_fadvise
 #include <dirent.h>         // readdir, opendir, closedir
 #include <sys/resource.h>   // getrlimit 
-#include <sys/stat.h>       // stat, S_ISREG
 #include <unistd.h>         // read, open, write, close, lseek, pread
 #include <assert.h>
 #include <string.h>
 #include <errno.h>
-#include "common/math.h"
+#include <time.h>
 
 int posixc_fd_limit()
 {
@@ -119,7 +119,7 @@ FILE* posixc_fopen(const char* filename, const char *mode){
 }
 
 bool posixc_stat(struct stat* statbuf, const char* filename){
-    return stat(filename, &statbuf)==0;
+    return stat(filename, statbuf)==0;
 }
 
 bool posixc_is_stale(struct stat* statbuf, int age_seconds){
@@ -150,7 +150,7 @@ bool posixc_read(int fd, char* buf, ssize_t* read_size, size_t n){
 }
 
 bool posixc_skip(int fd, size_t n){
-    return lseek(fd_, n, SEEK_CUR) != (off_t) -1;
+    return lseek(fd, n, SEEK_CUR) != (off_t) -1;
 }
 
 int posixc_readonly_open(const char* filename){
@@ -168,13 +168,13 @@ int posixc_appendable_open(const char* filename){
 }
 
 bool posixc_pread(int fd, char* buf, ssize_t* read_size, size_t n, uint64_t offset){
-    *read_size = ::pread(fd, buf, n, (off_t)(offset));
-    return *read_size>=0
+    *read_size = pread(fd, buf, n, (off_t)(offset));
+    return *read_size>=0;
 }
 
 bool posixc_unbuffered_write(int fd, const char* data, size_t size){
     while (size > 0) {
-        ssize_t bytes_written=write(fd_, data, size);
+        ssize_t bytes_written=write(fd, data, size);
         if (bytes_written < 0) {
             if (errno == EINTR) continue;  
             return false;
@@ -211,17 +211,4 @@ bool posixc_buffered_write(posixc_buffered_writable* bw, const char* data, size_
         return posixc_unbuffered_write(bw->fd, data, size);
     }
     return false;
-}
-
-bool posixc_sync(int fd){
-    return fdatasync(fd)==0;
-}
-
-int posixc_fd_limit(){
-    struct rlimit rlim;
-    if(getrlimit(RLIMIT_NOFILE, &rlim)==-1){
-        return -1;
-    }
-    if(rlim.rlim_cur == RLIM_INFINITY) return INT_MAX;
-    return rlim.rlim_cur;
 }

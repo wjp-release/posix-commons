@@ -1,6 +1,7 @@
 #pragma once
 
 #include "internal.h"
+#include "common/list.h"
 
 struct posixc_reactor{
 	pthread_mutex_t  mtx;

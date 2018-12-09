@@ -18,4 +18,4 @@ endmacro (wjptest)
 wjptest(fileio_test)
 wjptest(ipc_test)
 wjptest(slice_test)
-
+wjptest(timer_test)

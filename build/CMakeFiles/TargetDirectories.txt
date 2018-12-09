@@ -10,5 +10,8 @@
 /Users/wjp/Desktop/workspace/posix-commons/build/src/mac/CMakeFiles/edit_cache.dir
 /Users/wjp/Desktop/workspace/posix-commons/build/src/mac/CMakeFiles/posixc_mac.dir
 /Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/rebuild_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/timer_test.dir
 /Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/edit_cache.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/ipc_test.dir
 /Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/slice_test.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/fileio_test.dir

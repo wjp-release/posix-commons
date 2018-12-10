@@ -57,3 +57,8 @@ bool posixc_event_plat_create(posixc_event*e);
 bool posixc_event_plat_destroy(posixc_event*e);
 
 bool posixc_event_plat_submit(posixc_event*e);
+
+// Generate kqueue ids for non-file event handles
+int posixc_unique_timer_event_id();
+int posixc_unique_sig_event_id();
+int posixc_unique_user_event_id();

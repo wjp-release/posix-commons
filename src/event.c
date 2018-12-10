@@ -81,3 +81,16 @@ void posixc_timer_event_set_interval(posixc_event*e, int ms_interval, bool is_pe
     e->data_1=is_periodic? POSIXC_TIMER_PERIODIC:POSIXC_TIMER_ONESHOT;
     e->data_2=(uint64_t)ms_interval;
 }
+
+int posixc_unique_timer_event_id(){
+    static uint64_t id=0;
+    return id++;
+}
+int posixc_unique_sig_event_id(){
+    static uint64_t id=0;
+    return id++;
+}
+int posixc_unique_user_event_id(){
+    static uint64_t id=0;
+    return id++;
+}

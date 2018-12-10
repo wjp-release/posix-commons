@@ -79,3 +79,17 @@ bool posixc_ipc_getuid(const char* usockpath, uid_t* uid, int age_of_usockpath_s
     }
     return false;
 }
+
+int posixc_ipc_connect_dgram(const char* usockpath){
+    int fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+    if (fd == -1) return -1;
+    struct sockaddr_un addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sun_family = AF_UNIX;
+    strncpy(addr.sun_path, usockpath, sizeof(addr.sun_path)-1);
+    return connect(fd, (struct sockaddr*)&addr, sizeof(addr));
+}
+
+void posixc_ipc_send_dgram(int fd, const char*msg, int len){
+    write(fd, msg, len);
+}

@@ -2,15 +2,6 @@
 
 #include "internal.h"
 
-enum log_level {
-    LOG_LEVEL_DEBUG = 0,
-    LOG_LEVEL_INFO  = 1,
-    LOG_LEVEL_WARN  = 2,
-    LOG_LEVEL_ERR   = 3,
-    LOG_LEVEL_FATAL = 4,
-    LOG_LEVEL_NONE  = 5,
-    LOG_LEVEL_NUMBER = 6
-};
 
 typedef struct{
     enum log_level lowest;

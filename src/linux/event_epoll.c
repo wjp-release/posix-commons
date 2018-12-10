@@ -19,6 +19,7 @@ bool posixc_event_plat_destroy(posixc_event*e){
     return epoll_ctl(e->reactor->id, EPOLL_CTL_DEL, e->fd, &ee)==0;
 }
 
+//todo: processing timerfd ...
 bool posixc_event_plat_submit(posixc_event*e){
     struct epoll_event ee;
     ee.events=e->evmask|EPOLLONESHOT|EPOLLERR;

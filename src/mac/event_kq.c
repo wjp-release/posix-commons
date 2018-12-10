@@ -67,8 +67,9 @@ static void submit_sig(struct kevent* ev, posixc_event* e){
 
 static void submit_timer(struct kevent* ev, posixc_event* e){
     uint32_t flag = EV_ENABLE|EV_CLEAR;
-    if(e->data_1==1){
-        flag|=EV_DISPATCH;
+    if(e->data_1==1){ // trigger once
+        flag|=EV_ONESHOT;
+        //Fixme: EV_ONESHOT/EV_DISPATCH doesn't work on mac. Try absolute mode instead!
     }
     EV_SET(ev, (uintptr_t)(e->fd), EVFILT_TIMER, flag, 0, (intptr_t)e->data_2, e);
 }

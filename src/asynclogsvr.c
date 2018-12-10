@@ -11,6 +11,9 @@ static void on_dgram(posixc_event* e, int evmask, void* arg){
 }
 
 void posixc_asynclogsvr_init(posixc_asynclogsvr*svr,const char* dir, int max_file_size, int flush_interval){
+    strcpy(svr->dir, dir);
+    svr->max_file_size=max_file_size;
+    svr->flush_interval=flush_interval;
     svr->reactor=posixc_reactor_create();
     //create dgram event
     int ipcfd=posixc_ipc_dgram_socket(usockpath_log);

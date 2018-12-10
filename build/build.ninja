@@ -200,6 +200,12 @@ build src/common/CMakeFiles/posixc_common.dir/slice.c.o: C_COMPILER__posixc_comm
   INCLUDES = -I.././include -I.././src
   OBJECT_DIR = src/common/CMakeFiles/posixc_common.dir
   OBJECT_FILE_DIR = src/common/CMakeFiles/posixc_common.dir
+build src/common/CMakeFiles/posixc_common.dir/timestr.c.o: C_COMPILER__posixc_common ../src/common/timestr.c || cmake_object_order_depends_target_posixc_common
+  DEP_FILE = src/common/CMakeFiles/posixc_common.dir/timestr.c.o.d
+  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu99
+  INCLUDES = -I.././include -I.././src
+  OBJECT_DIR = src/common/CMakeFiles/posixc_common.dir
+  OBJECT_FILE_DIR = src/common/CMakeFiles/posixc_common.dir
 build src/common/CMakeFiles/posixc_common.dir/utils.c.o: C_COMPILER__posixc_common ../src/common/utils.c || cmake_object_order_depends_target_posixc_common
   DEP_FILE = src/common/CMakeFiles/posixc_common.dir/utils.c.o.d
   FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu99
@@ -214,7 +220,7 @@ build src/common/CMakeFiles/posixc_common.dir/utils.c.o: C_COMPILER__posixc_comm
 #############################################
 # Link the static library src/common/libposixc_common.a
 
-build src/common/libposixc_common.a: C_STATIC_LIBRARY_LINKER__posixc_common src/common/CMakeFiles/posixc_common.dir/boyermoore.c.o src/common/CMakeFiles/posixc_common.dir/kmp.c.o src/common/CMakeFiles/posixc_common.dir/slice.c.o src/common/CMakeFiles/posixc_common.dir/utils.c.o
+build src/common/libposixc_common.a: C_STATIC_LIBRARY_LINKER__posixc_common src/common/CMakeFiles/posixc_common.dir/boyermoore.c.o src/common/CMakeFiles/posixc_common.dir/kmp.c.o src/common/CMakeFiles/posixc_common.dir/slice.c.o src/common/CMakeFiles/posixc_common.dir/timestr.c.o src/common/CMakeFiles/posixc_common.dir/utils.c.o
   ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   LANGUAGE_COMPILE_FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer
   OBJECT_DIR = src/common/CMakeFiles/posixc_common.dir
@@ -297,6 +303,77 @@ build tests/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
   pool = console
   restat = 1
 build tests/rebuild_cache: phony tests/CMakeFiles/rebuild_cache.util
+
+#############################################
+# Utility command for edit_cache
+
+build tests/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/wjp/Desktop/workspace/posix-commons/build/tests && /opt/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+build tests/edit_cache: phony tests/CMakeFiles/edit_cache.util
+# =============================================================================
+# Object build statements for EXECUTABLE target asynclogcli_test
+
+
+#############################################
+# Order-only phony target for asynclogcli_test
+
+build cmake_object_order_depends_target_asynclogcli_test: phony || cmake_object_order_depends_target_posixc cmake_object_order_depends_target_posixc_common cmake_object_order_depends_target_posixc_mac
+build tests/CMakeFiles/asynclogcli_test.dir/asynclogcli_test.c.o: C_COMPILER__asynclogcli_test ../tests/asynclogcli_test.c || cmake_object_order_depends_target_asynclogcli_test
+  DEP_FILE = tests/CMakeFiles/asynclogcli_test.dir/asynclogcli_test.c.o.d
+  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu99
+  INCLUDES = -I.././include -I.././src
+  OBJECT_DIR = tests/CMakeFiles/asynclogcli_test.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/asynclogcli_test.dir
+
+# =============================================================================
+# Link build statements for EXECUTABLE target asynclogcli_test
+
+
+#############################################
+# Link the executable tests/asynclogcli_test
+
+build tests/asynclogcli_test: C_EXECUTABLE_LINKER__asynclogcli_test tests/CMakeFiles/asynclogcli_test.dir/asynclogcli_test.c.o | src/libposixc.a src/mac/libposixc_mac.a src/common/libposixc_common.a || src/common/libposixc_common.a src/libposixc.a src/mac/libposixc_mac.a
+  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  LINK_LIBRARIES = -Wl,-rpath,/Users/wjp/Desktop/workspace/posix-commons/./src src/libposixc.a src/mac/libposixc_mac.a src/common/libposixc_common.a -lpthread
+  LINK_PATH = -L/Users/wjp/Desktop/workspace/posix-commons/./src
+  OBJECT_DIR = tests/CMakeFiles/asynclogcli_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = tests/asynclogcli_test
+  TARGET_PDB = asynclogcli_test.dbg
+# =============================================================================
+# Object build statements for EXECUTABLE target asynclogsvr_test
+
+
+#############################################
+# Order-only phony target for asynclogsvr_test
+
+build cmake_object_order_depends_target_asynclogsvr_test: phony || cmake_object_order_depends_target_posixc cmake_object_order_depends_target_posixc_common cmake_object_order_depends_target_posixc_mac
+build tests/CMakeFiles/asynclogsvr_test.dir/asynclogsvr_test.c.o: C_COMPILER__asynclogsvr_test ../tests/asynclogsvr_test.c || cmake_object_order_depends_target_asynclogsvr_test
+  DEP_FILE = tests/CMakeFiles/asynclogsvr_test.dir/asynclogsvr_test.c.o.d
+  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu99
+  INCLUDES = -I.././include -I.././src
+  OBJECT_DIR = tests/CMakeFiles/asynclogsvr_test.dir
+  OBJECT_FILE_DIR = tests/CMakeFiles/asynclogsvr_test.dir
+
+# =============================================================================
+# Link build statements for EXECUTABLE target asynclogsvr_test
+
+
+#############################################
+# Link the executable tests/asynclogsvr_test
+
+build tests/asynclogsvr_test: C_EXECUTABLE_LINKER__asynclogsvr_test tests/CMakeFiles/asynclogsvr_test.dir/asynclogsvr_test.c.o | src/libposixc.a src/mac/libposixc_mac.a src/common/libposixc_common.a || src/common/libposixc_common.a src/libposixc.a src/mac/libposixc_mac.a
+  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
+  LINK_LIBRARIES = -Wl,-rpath,/Users/wjp/Desktop/workspace/posix-commons/./src src/libposixc.a src/mac/libposixc_mac.a src/common/libposixc_common.a -lpthread
+  LINK_PATH = -L/Users/wjp/Desktop/workspace/posix-commons/./src
+  OBJECT_DIR = tests/CMakeFiles/asynclogsvr_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = tests/asynclogsvr_test
+  TARGET_PDB = asynclogsvr_test.dbg
 # =============================================================================
 # Object build statements for EXECUTABLE target timer_test
 
@@ -328,46 +405,6 @@ build tests/timer_test: C_EXECUTABLE_LINKER__timer_test tests/CMakeFiles/timer_t
   PRE_LINK = :
   TARGET_FILE = tests/timer_test
   TARGET_PDB = timer_test.dbg
-
-#############################################
-# Utility command for edit_cache
-
-build tests/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /Users/wjp/Desktop/workspace/posix-commons/build/tests && /opt/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-  DESC = No interactive CMake dialog available...
-  restat = 1
-build tests/edit_cache: phony tests/CMakeFiles/edit_cache.util
-# =============================================================================
-# Object build statements for EXECUTABLE target ipc_test
-
-
-#############################################
-# Order-only phony target for ipc_test
-
-build cmake_object_order_depends_target_ipc_test: phony || cmake_object_order_depends_target_posixc cmake_object_order_depends_target_posixc_common cmake_object_order_depends_target_posixc_mac
-build tests/CMakeFiles/ipc_test.dir/ipc_test.c.o: C_COMPILER__ipc_test ../tests/ipc_test.c || cmake_object_order_depends_target_ipc_test
-  DEP_FILE = tests/CMakeFiles/ipc_test.dir/ipc_test.c.o.d
-  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu99
-  INCLUDES = -I.././include -I.././src
-  OBJECT_DIR = tests/CMakeFiles/ipc_test.dir
-  OBJECT_FILE_DIR = tests/CMakeFiles/ipc_test.dir
-
-# =============================================================================
-# Link build statements for EXECUTABLE target ipc_test
-
-
-#############################################
-# Link the executable tests/ipc_test
-
-build tests/ipc_test: C_EXECUTABLE_LINKER__ipc_test tests/CMakeFiles/ipc_test.dir/ipc_test.c.o | src/libposixc.a src/mac/libposixc_mac.a src/common/libposixc_common.a || src/common/libposixc_common.a src/libposixc.a src/mac/libposixc_mac.a
-  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
-  LINK_LIBRARIES = -Wl,-rpath,/Users/wjp/Desktop/workspace/posix-commons/./src src/libposixc.a src/mac/libposixc_mac.a src/common/libposixc_common.a -lpthread
-  LINK_PATH = -L/Users/wjp/Desktop/workspace/posix-commons/./src
-  OBJECT_DIR = tests/CMakeFiles/ipc_test.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = tests/ipc_test
-  TARGET_PDB = ipc_test.dbg
 # =============================================================================
 # Object build statements for EXECUTABLE target slice_test
 
@@ -400,41 +437,10 @@ build tests/slice_test: C_EXECUTABLE_LINKER__slice_test tests/CMakeFiles/slice_t
   TARGET_FILE = tests/slice_test
   TARGET_PDB = slice_test.dbg
 # =============================================================================
-# Object build statements for EXECUTABLE target fileio_test
-
-
-#############################################
-# Order-only phony target for fileio_test
-
-build cmake_object_order_depends_target_fileio_test: phony || cmake_object_order_depends_target_posixc cmake_object_order_depends_target_posixc_common cmake_object_order_depends_target_posixc_mac
-build tests/CMakeFiles/fileio_test.dir/fileio_test.c.o: C_COMPILER__fileio_test ../tests/fileio_test.c || cmake_object_order_depends_target_fileio_test
-  DEP_FILE = tests/CMakeFiles/fileio_test.dir/fileio_test.c.o.d
-  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu99
-  INCLUDES = -I.././include -I.././src
-  OBJECT_DIR = tests/CMakeFiles/fileio_test.dir
-  OBJECT_FILE_DIR = tests/CMakeFiles/fileio_test.dir
-
-# =============================================================================
-# Link build statements for EXECUTABLE target fileio_test
-
-
-#############################################
-# Link the executable tests/fileio_test
-
-build tests/fileio_test: C_EXECUTABLE_LINKER__fileio_test tests/CMakeFiles/fileio_test.dir/fileio_test.c.o | src/libposixc.a src/mac/libposixc_mac.a src/common/libposixc_common.a || src/common/libposixc_common.a src/libposixc.a src/mac/libposixc_mac.a
-  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
-  LINK_LIBRARIES = -Wl,-rpath,/Users/wjp/Desktop/workspace/posix-commons/./src src/libposixc.a src/mac/libposixc_mac.a src/common/libposixc_common.a -lpthread
-  LINK_PATH = -L/Users/wjp/Desktop/workspace/posix-commons/./src
-  OBJECT_DIR = tests/CMakeFiles/fileio_test.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = tests/fileio_test
-  TARGET_PDB = fileio_test.dbg
-# =============================================================================
 # Target aliases.
 
-build fileio_test: phony tests/fileio_test
-build ipc_test: phony tests/ipc_test
+build asynclogcli_test: phony tests/asynclogcli_test
+build asynclogsvr_test: phony tests/asynclogsvr_test
 build libposixc.a: phony src/libposixc.a
 build libposixc_common.a: phony src/common/libposixc_common.a
 build libposixc_mac.a: phony src/mac/libposixc_mac.a
@@ -470,7 +476,7 @@ build  src/mac/all: phony posixc_mac
 #############################################
 # Folder: /Users/wjp/Desktop/workspace/posix-commons/build/tests
 
-build  tests/all: phony timer_test ipc_test slice_test fileio_test
+build  tests/all: phony asynclogcli_test asynclogsvr_test timer_test slice_test
 # =============================================================================
 # Built-in targets
 
@@ -478,7 +484,7 @@ build  tests/all: phony timer_test ipc_test slice_test fileio_test
 #############################################
 # The main all target.
 
-build all: phony src/libposixc.a src/common/libposixc_common.a src/mac/libposixc_mac.a tests/timer_test tests/ipc_test tests/slice_test tests/fileio_test
+build all: phony src/libposixc.a src/common/libposixc_common.a src/mac/libposixc_mac.a tests/asynclogcli_test tests/asynclogsvr_test tests/timer_test tests/slice_test
 
 #############################################
 # Make the all target the default.

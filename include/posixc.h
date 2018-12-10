@@ -8,6 +8,7 @@
 #include "common/math.h"
 #include "common/slice.h"
 #include "common/list.h"
+#include "common/timestr.h"
 
 #include "fileio.h"
 #include "ipc.h"

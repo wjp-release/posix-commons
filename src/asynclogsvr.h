@@ -15,7 +15,7 @@ struct posixc_asynclogsvr{
     posixc_event*   timer_event;
     posixc_event*   dgram_event;
     uint32_t        max_file_size; //rerolling size
-    int             flush_interval; //seconds
+    int             flush_interval; //seconds, can only be set on init
 };
 
 void posixc_asynclogsvr_init(posixc_asynclogsvr*svr,const char* dir, int max_file_size, int flush_interval);

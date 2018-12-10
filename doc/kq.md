@@ -3,4 +3,4 @@ kqueue在不指定timeout的默认情况下是永久阻塞的，相当于epoll�
 
 kqueue可以实现与epoll的oneshot几乎相同的行为，不过并不需要EV_ONESHOT，而是在创建时EV_DISABLE，提交时EV_DISPATCH。EV_ONESHOT会在触发后删掉事件，EV_ONESHOT才是触发后disable事件。显然后者更符合epoll里的oneshot（因为oneshot只是为了避免事件驱动系统里被多个工作线程处理相同事件，以后还要再提交这个事件，并不需要真正destroy它）。
 
-
+此外，kqueue的计时器默认是不立刻触发，而是interval时间之后第一次触发。默认是periodic的，除非指定absolute模式，（注意经实测oneshot模式和dispatch模式在mac下是不行的！这和freebsd文档不符）。

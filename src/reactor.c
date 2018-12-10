@@ -8,7 +8,7 @@
 void posixc_reactor_destroy(posixc_reactor* reactor){
 	posixc_reactor_gc(reactor);
 	reactor->closing=true;
-	pthread_join(&reactor->thread, NULL);
+	pthread_join(reactor->thread, NULL);
 	close(reactor->id);
 	pthread_mutex_destroy(&reactor->mtx);
 	free(reactor);

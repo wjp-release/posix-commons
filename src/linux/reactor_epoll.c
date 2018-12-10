@@ -31,6 +31,7 @@ void* posixc_reactor_plat_threadfn(void*arg){
 		}
 		if(i%loops_per_gc == 0) posixc_reactor_gc(reactor);
 	}
+	return NULL;
 }
 
 int posixc_reactor_plat_create(){

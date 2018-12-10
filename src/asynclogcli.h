@@ -10,3 +10,6 @@ struct posixc_asynclogcli{
 void posixc_asynclogcli_init(posixc_asynclogcli*cli, const char* usockpath, int lowest);
 
 void posixc_asynclogcli_log(posixc_asynclogcli*cli, const char* what, int len, int level);
+
+void posixc_asynclogcli_logstr(posixc_asynclogcli*cli, const char* what, int level);
+

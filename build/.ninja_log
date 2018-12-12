@@ -59,3 +59,9 @@
 1172	1260	1544630346	tests/asynclogcli_test	5249e457eb5b4ced
 1174	1262	1544630346	tests/asynclogsvr_test	fb8f2dcee32f75c6
 1179	1263	1544630346	tests/slice_test	8095d197ea533884
+4	127	1544630621	src/CMakeFiles/posixc.dir/asynclogsvr.c.o	2b7de611c9e3b20a
+127	186	1544630621	src/libposixc.a	3088f84a15b4c86d
+190	283	1544630621	tests/slice_test	8095d197ea533884
+187	283	1544630621	tests/asynclogcli_test	5249e457eb5b4ced
+188	284	1544630621	tests/timer_test	fd5220763a6b25bb
+188	286	1544630621	tests/asynclogsvr_test	fb8f2dcee32f75c6

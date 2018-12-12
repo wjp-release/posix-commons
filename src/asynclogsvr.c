@@ -28,9 +28,9 @@ void posixc_asynclogsvr_roll(posixc_asynclogsvr*svr){
 // Tries to exit gracefully
 static void on_sigint(posixc_event* e, int evmask, void* arg){
     posixc_asynclogsvr*svr=arg;
-    printf("bye~\n");
     posixc_asynclogsvr_flush(svr);
     posixc_asynclogsvr_destroy(svr);
+    printf("\nbye~\n");
     exit(0);
 }
 

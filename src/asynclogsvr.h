@@ -14,6 +14,7 @@ struct posixc_asynclogsvr{
     posixc_reactor* reactor;
     posixc_event*   timer_event;
     posixc_event*   dgram_event;
+    posixc_event*   sigint_event;
     uint32_t        max_file_size; //rerolling size
     int             flush_interval; //ms, can only be set on init
     uint64_t        bytes_written;

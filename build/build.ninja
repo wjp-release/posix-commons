@@ -144,6 +144,14 @@ build src/CMakeFiles/posixc.dir/runtime.c.o: C_COMPILER__posixc ../src/runtime.c
   OBJECT_FILE_DIR = src/CMakeFiles/posixc.dir
   TARGET_COMPILE_PDB = src/CMakeFiles/posixc.dir/posixc.pdb
   TARGET_PDB = src/libposixc.pdb
+build src/CMakeFiles/posixc.dir/signal.c.o: C_COMPILER__posixc ../src/signal.c || cmake_object_order_depends_target_posixc
+  DEP_FILE = src/CMakeFiles/posixc.dir/signal.c.o.d
+  FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu99
+  INCLUDES = -I.././include -I.././src
+  OBJECT_DIR = src/CMakeFiles/posixc.dir
+  OBJECT_FILE_DIR = src/CMakeFiles/posixc.dir
+  TARGET_COMPILE_PDB = src/CMakeFiles/posixc.dir/posixc.pdb
+  TARGET_PDB = src/libposixc.pdb
 build src/CMakeFiles/posixc.dir/tcp.c.o: C_COMPILER__posixc ../src/tcp.c || cmake_object_order_depends_target_posixc
   DEP_FILE = src/CMakeFiles/posixc.dir/tcp.c.o.d
   FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk   -std=gnu99
@@ -160,7 +168,7 @@ build src/CMakeFiles/posixc.dir/tcp.c.o: C_COMPILER__posixc ../src/tcp.c || cmak
 #############################################
 # Link the static library src/libposixc.a
 
-build src/libposixc.a: C_STATIC_LIBRARY_LINKER__posixc src/CMakeFiles/posixc.dir/asynclogcli.c.o src/CMakeFiles/posixc.dir/asynclogsvr.c.o src/CMakeFiles/posixc.dir/event.c.o src/CMakeFiles/posixc.dir/fileio.c.o src/CMakeFiles/posixc.dir/ipc.c.o src/CMakeFiles/posixc.dir/log.c.o src/CMakeFiles/posixc.dir/reactor.c.o src/CMakeFiles/posixc.dir/runtime.c.o src/CMakeFiles/posixc.dir/tcp.c.o || src/common/libposixc_common.a src/mac/libposixc_mac.a
+build src/libposixc.a: C_STATIC_LIBRARY_LINKER__posixc src/CMakeFiles/posixc.dir/asynclogcli.c.o src/CMakeFiles/posixc.dir/asynclogsvr.c.o src/CMakeFiles/posixc.dir/event.c.o src/CMakeFiles/posixc.dir/fileio.c.o src/CMakeFiles/posixc.dir/ipc.c.o src/CMakeFiles/posixc.dir/log.c.o src/CMakeFiles/posixc.dir/reactor.c.o src/CMakeFiles/posixc.dir/runtime.c.o src/CMakeFiles/posixc.dir/signal.c.o src/CMakeFiles/posixc.dir/tcp.c.o || src/common/libposixc_common.a src/mac/libposixc_mac.a
   ARCH_FLAGS = -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk
   LANGUAGE_COMPILE_FLAGS = -fPIC  -g -O0 -Wall -Wextra -fno-omit-frame-pointer
   OBJECT_DIR = src/CMakeFiles/posixc.dir

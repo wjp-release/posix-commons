@@ -2,6 +2,8 @@
 #include "event.h"
 #include "ipc.h"
 #include <assert.h>
+#include <stdlib.h>
+#include <signal.h>
 
 // Flushes every interval ms
 static void on_clock(posixc_event* e, int evmask, void* arg){
@@ -23,6 +25,15 @@ void posixc_asynclogsvr_roll(posixc_asynclogsvr*svr){
     svr->bytes_written=0;
 }
 
+// Tries to exit gracefully
+static void on_sigint(posixc_event* e, int evmask, void* arg){
+    posixc_asynclogsvr*svr=arg;
+    printf("bye~\n");
+    posixc_asynclogsvr_flush(svr);
+    posixc_asynclogsvr_destroy(svr);
+    exit(0);
+}
+
 // Note that: even though our reactor is configured to use nonblocking sockets, a read() over datagram socket always returns a complete datagram or nothing at all. 
 static void on_dgram(posixc_event* e, int evmask, void* arg){
     posixc_asynclogsvr*svr=arg;
@@ -39,6 +50,7 @@ static void on_dgram(posixc_event* e, int evmask, void* arg){
 }
 
 void posixc_asynclogsvr_init(posixc_asynclogsvr*svr,const char* dir, int max_file_size, int flush_interval){
+    posixc_block_all_signals();
     svr->bytes_written=0;
     // init filename
     svr->dirlen=strlen(dir);
@@ -61,12 +73,15 @@ void posixc_asynclogsvr_init(posixc_asynclogsvr*svr,const char* dir, int max_fil
     svr->dgram_event=posixc_event_create(svr->reactor,ipcfd, on_dgram, svr, SOCK_EV);
     // create timer event
     svr->timer_event=posixc_event_create(svr->reactor, posixc_unique_timer_event_id(),on_clock,svr,TIMER_EV);
+    // create signal events
+    svr->sigint_event=posixc_event_create(svr->reactor, SIGINT,on_sigint,svr,SIG_EV);
     // creation of events can't fail
-    assert(svr->dgram_event!=NULL && svr->timer_event!=NULL);  
+    assert(svr->dgram_event!=NULL && svr->timer_event!=NULL && svr->sigint_event!=NULL);  
     posixc_timer_event_set_interval(svr->timer_event,flush_interval,true);
-    // submit both events
+    // submit events
     posixc_event_submit(svr->dgram_event,POSIXC_EVENT_IN);
     posixc_event_submit(svr->timer_event,POSIXC_EVENT_TIMER);
+    posixc_event_submit(svr->sigint_event,POSIXC_EVENT_SIG);
 }
 
 void posixc_asynclogsvr_destroy(posixc_asynclogsvr*svr){

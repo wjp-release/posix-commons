@@ -62,7 +62,7 @@ static void submit_write(struct kevent* ev, posixc_event* e){
 }
 
 static void submit_sig(struct kevent* ev, posixc_event* e){
-	EV_SET(ev, (uintptr_t)(e->fd), EVFILT_SIGNAL, ev_submit, 0, 0, e); //fd is unused
+	EV_SET(ev, (uintptr_t)(e->fd), EVFILT_SIGNAL, EV_ENABLE|EV_CLEAR, 0, 0, e); //fd is unused
 }
 
 static void submit_timer(struct kevent* ev, posixc_event* e){

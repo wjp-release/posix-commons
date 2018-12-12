@@ -31,12 +31,12 @@ void posixc_asynclogcli_log(posixc_asynclogcli*cli, const char* what, int len, i
     default:
         return;
     }
-    char buf[4096];
+    char buf[one_page];
     int pos=posixc_default_timestr(buf);
     strcpy(buf+pos,tmp);
     pos+=strlen(tmp);
-    if(pos+len>4095){
-        len=4095-pos; //discard overflowing bytes
+    if(pos+len>one_page-1){
+        len=one_page-1-pos; //discard overflowing bytes
     }
     memcpy(buf+pos,what,len);
     pos+=len;

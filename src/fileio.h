@@ -29,6 +29,8 @@ int     posixc_appendable_open(const char* filename);
 bool    posixc_pread(int fd, char* buf, ssize_t* read_size, size_t n, uint64_t offset);
 bool    posixc_unbuffered_write(int fd, const char* data, size_t size);
 void    posixc_buffered_writable_init(posixc_buffered_writable* bw, int fd);
+void    posixc_buffered_writable_init_from(posixc_buffered_writable* bw, const char* filename);
+
 bool    posixc_buffered_write(posixc_buffered_writable* bw, const char* data, size_t size);
 bool    posixc_flush(posixc_buffered_writable* bw);
 

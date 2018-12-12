@@ -31,5 +31,6 @@ enum log_level {
 };
 
 // Configurable constants
+#define one_page 4096
 #define buffered_writable_size 4096 //used in fileio.c
 #define usockpath_log "/tmp/asynclog" //used in asynclogsvr.c

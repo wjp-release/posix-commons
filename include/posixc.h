@@ -1,5 +1,10 @@
 #pragma once
 
+//Use this header instead of internal headers, so that c++ targets can directly link c lib
+#ifdef __cplusplus 
+extern "C" {    
+#endif
+
 #include "internal.h"
 
 #include "common/boyermoore.h"
@@ -26,4 +31,8 @@
 #endif
 
 #ifdef __APPLE__
+#endif
+
+#ifdef __cplusplus
+}
 #endif

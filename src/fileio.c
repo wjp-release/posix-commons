@@ -195,6 +195,10 @@ void posixc_buffered_writable_init(posixc_buffered_writable* bw, int fd){
     bw->fd=fd;
 }
 
+void posixc_buffered_writable_init_from(posixc_buffered_writable* bw, const char* filename){
+    posixc_buffered_writable_init(bw, posixc_writable_open(filename));
+}
+
 bool posixc_buffered_write(posixc_buffered_writable* bw, const char* data, size_t size){
     size_t n = posixc_min(size, buffered_writable_size - bw->pos);
     memcpy(bw->buf + bw->pos, data, n);

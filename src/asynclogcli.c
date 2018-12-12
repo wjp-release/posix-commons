@@ -5,6 +5,7 @@
 void posixc_asynclogcli_init(posixc_asynclogcli*cli, const char* usockpath, int lowest){
     cli->send_fd=posixc_ipc_connect_dgram(usockpath);
     cli->lowest_log_level=lowest;
+    if(cli->send_fd<0) fprintf(stderr,"dgram sock not connected.\n");
 }
 
 
@@ -13,19 +14,19 @@ void posixc_asynclogcli_log(posixc_asynclogcli*cli, const char* what, int len, i
     const char* tmp=NULL;
     switch(level){
     case LOG_LEVEL_DEBUG:
-        tmp=" Debug | ";
+        tmp=" Debug: ";
         break;
     case LOG_LEVEL_INFO:
-        tmp=" Info | ";
+        tmp=" Info: ";
         break;
     case LOG_LEVEL_WARN:
-        tmp=" Warn | ";
+        tmp=" Warn: ";
         break;
     case LOG_LEVEL_ERR:
-        tmp=" Err | ";
+        tmp=" Err: ";
         break;
     case LOG_LEVEL_FATAL:
-        tmp=" Fatal | ";
+        tmp=" Fatal: ";
         break;
     default:
         return;

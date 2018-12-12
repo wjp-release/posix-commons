@@ -87,7 +87,9 @@ int posixc_ipc_connect_dgram(const char* usockpath){
     memset(&addr, 0, sizeof(addr));
     addr.sun_family = AF_UNIX;
     strncpy(addr.sun_path, usockpath, sizeof(addr.sun_path)-1);
-    return connect(fd, (struct sockaddr*)&addr, sizeof(addr));
+    int rv = connect(fd, (struct sockaddr*)&addr, sizeof(addr));
+    if(rv==-1) return -1;
+    return fd;
 }
 
 void posixc_ipc_send_dgram(int fd, const char*msg, int len){

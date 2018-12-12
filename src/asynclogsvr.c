@@ -7,7 +7,16 @@ static void on_clock(posixc_event* e, int evmask, void* arg){
 }
 
 static void on_dgram(posixc_event* e, int evmask, void* arg){
-    printf("dgram!\n");
+    char buf[1000];
+    ssize_t nr = read(e->fd, buf, sizeof(buf));
+    if (nr < 0){
+        fprintf(stderr,"read: %s\n", strerror(errno));
+    }
+    if (nr == 0) {
+        fprintf(stderr,"client: eof\n");
+    } else {
+        printf("received %ld bytes: %.*s\n", nr, (int)nr, buf);
+    }
 }
 
 void posixc_asynclogsvr_init(posixc_asynclogsvr*svr,const char* dir, int max_file_size, int flush_interval){

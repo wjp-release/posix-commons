@@ -13,6 +13,7 @@
 
 static void consume_ev(const struct kevent* ev){
     int evmask_to_consume=0;
+	printf("ev type=%d", ev->filter);
     switch(ev->filter){
     case EVFILT_READ:
         evmask_to_consume=POSIXC_EVENT_IN;
@@ -46,6 +47,7 @@ void* posixc_reactor_plat_threadfn(void*arg){
 		struct kevent events[max_events];
 		int n = kevent(reactor->id,NULL,0,events,max_events,NULL);
 		if(n<0 && errno==EBADF) return NULL;
+		printf("n=%d",n);
 		for(int j=0; j<n; j++){
 			const struct kevent* ev=&events[j];
 			consume_ev(ev);

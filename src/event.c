@@ -6,6 +6,7 @@
 #include "event.h"
 #include "reactor.h"
 
+// Note that: All fds of posixc_event are by default nonblocking. Users should check errorno and resubmit the event when EAGAIN is returned. Read() over datagram sockets is an exception though. It's guaranteed to be a completion on every successful call.
 void posixc_preparefd(int fd){
     fcntl(fd, F_SETFD, FD_CLOEXEC);
 	fcntl(fd, F_SETFL, O_NONBLOCK);
@@ -32,6 +33,7 @@ static void posixc_event_release(posixc_event*event){
     close(event->fd);
     pthread_mutex_destroy(&event->mtx);
     free(event);
+    //printf("event released gracefully~\n");
 }
 
 posixc_event* posixc_event_create(posixc_reactor* reactor, int fd, posixc_event_cb cb, void* arg, uint8_t type){
@@ -47,29 +49,36 @@ posixc_event* posixc_event_create(posixc_reactor* reactor, int fd, posixc_event_
 }
 
 static void add_to_gc_list(posixc_event*e){
-    printf("add to gc list, reactor=%d\n", (int)e->reactor);
+    // printf("add to gc list, reactor=%d\n", (int)e->reactor);
+    pthread_mutex_lock(&e->reactor->mtx);
     list_add_tail(&e->node, &e->reactor->gc_events);
-    posixc_event*tmp;
-    list_for_each_entry(tmp, &e->reactor->gc_events, node){
-	    printf("type= %d fd= %d\n", tmp->type, tmp->fd);
-    }
+    pthread_mutex_unlock(&e->reactor->mtx);
+    // posixc_event*tmp;
+    // list_for_each_entry(tmp, &e->reactor->gc_events, node){
+	//     printf("type= %d fd= %d\n", tmp->type, tmp->fd);
+    // }
 }
 
 void posixc_event_destroy(posixc_event*e){
+    bool is_reactor=pthread_self()==e->reactor->thread;
+    //printf("destroy by %s", is_reactor ? "reactor background thread":"other thread");
     // Any user thread that holds a reference to the posixc_event could stop it from working.
 	if (!e->closing) {  
         e->closing = true;
         posixc_event_plat_destroy(e);
 		shutdown(e->fd, SHUT_RDWR);
         //add e into gc list, let reactor release it
-        add_to_gc_list(e);
+        if(!is_reactor){
+            add_to_gc_list(e);
+        }
 	}
-    // Final destruction can only be performed by its owning reactor thread. This restriction ensures that the reactor won't process already destroyed posixc_events.
-    if(pthread_self()==e->reactor->thread){
+    // Final destruction can only be performed by its owning reactor thread. This restriction ensures that the reactor won't process already destroyed posixc_events which point to garbage data.
+    if(is_reactor){
         posixc_event_release(e);
     }
 }
 
+// Since we are using one-shot mode for both epoll & kqueue, the event flags must be stored in posixc_event structure. Users must resubmit an event if it is consumed.
 bool posixc_event_submit(posixc_event* e, int evmask){
     if (e->closing) return false; 
 	pthread_mutex_lock(&e->mtx);

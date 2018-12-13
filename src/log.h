@@ -2,7 +2,6 @@
 
 #include "internal.h"
 
-
 typedef struct{
     enum log_level lowest;
     pthread_mutex_t mtx;

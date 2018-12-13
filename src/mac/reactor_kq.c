@@ -9,7 +9,7 @@
 #include "event.h"
 
 #define max_events 64
-#define loops_per_gc 128
+#define loops_per_gc 2
 
 static void consume_ev(const struct kevent* ev){
     int evmask_to_consume=0;
@@ -52,6 +52,8 @@ void* posixc_reactor_plat_threadfn(void*arg){
 		}
 		if(i%loops_per_gc == 0) posixc_reactor_gc(reactor);
 	}
+	posixc_reactor_gc(reactor); //Call final gc on exit; should almost always expect nothing to collect at this point
+	//printf("reactor background thread exits gracefully~\n");
 	return NULL;
 }
 

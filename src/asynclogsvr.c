@@ -29,7 +29,7 @@ void posixc_asynclogsvr_roll(posixc_asynclogsvr*svr){
 static void on_sigint(posixc_event* e, int evmask, void* arg){
     posixc_asynclogsvr*svr=arg;
     posixc_asynclogsvr_flush(svr);
-    posixc_asynclogsvr_destroy(svr);
+    posixc_asynclogsvr_destroy(svr); // Note that on_sigint as well as other callbacks are executed in the reactor background thread. Therefore this call can release 
     printf("\nbye~\n");
     exit(0);
 }

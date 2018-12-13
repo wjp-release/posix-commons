@@ -1,10 +1,5 @@
 #pragma once
 
-//Use this header instead of internal headers, so that c++ targets can directly link c lib
-#ifdef __cplusplus 
-extern "C" {    
-#endif
-
 #include "internal.h"
 
 #include "common/boyermoore.h"
@@ -24,15 +19,13 @@ extern "C" {
 #include "asynclogsvr.h"
 #include "event.h"
 #include "reactor.h"
+#include "localasynclog.h"
 
 #ifdef __linux__
 #include "linux/eventfd.h"
 #include "linux/signalfd.h"
+#include "linux/timerfd.h"
 #endif
 
 #ifdef __APPLE__
-#endif
-
-#ifdef __cplusplus
-}
 #endif

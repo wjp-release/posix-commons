@@ -25,7 +25,7 @@ typedef void (*posixc_event_cb)(posixc_event*, int, void *);
 
 struct posixc_event{
     posixc_reactor* reactor;
-    int             fd;
+    int             fd;  
     posixc_event_cb cb;
     void*           arg;
     int             evmask;
@@ -34,14 +34,16 @@ struct posixc_event{
     uint64_t        data_1; // if data_1 == 1, timer will be triggered only once
     uint64_t        data_2; // used as delay time for timer events
     pthread_mutex_t mtx;
-    list_node       node;
+    list_node       node; // helps graceful destruction of this event.
 };
 
 // APIs
 posixc_event* posixc_event_create(posixc_reactor* r, int fd, posixc_event_cb cb, void* arg, uint8_t type);
 
+//User code is not allowed to actually release any event since that could possibly convert this event to garbage data in current eventloop. The posixc_event_destroy() function called from user threads will simply mark it as closing and add it to the gc list. Actual garbage collection is performed by its owning reactor thread.
 void posixc_event_destroy(posixc_event*e);
 
+//Every event is triggered exactly once. If you want to continue watching this event, resubmit it.
 bool posixc_event_submit(posixc_event* e, int evmask);
 
 void posixc_preparefd(int fd);
@@ -51,7 +53,6 @@ void posixc_event_consume(posixc_event*e, int evmask_to_consume, posixc_event_cb
 void posixc_timer_event_set_interval(posixc_event*e, int ms_interval, bool is_periodic);
 
 // platform-specific (epoll or kqueue) impl functions
-
 bool posixc_event_plat_create(posixc_event*e);
 
 bool posixc_event_plat_destroy(posixc_event*e);

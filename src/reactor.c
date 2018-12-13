@@ -12,7 +12,6 @@ void posixc_reactor_destroy(posixc_reactor* reactor){
 	close(reactor->id);
 	pthread_mutex_destroy(&reactor->mtx);
 	free(reactor);
-	printf("reactor destroyed");
 }
 
 posixc_reactor* posixc_reactor_create(){
@@ -30,4 +29,20 @@ posixc_reactor* posixc_reactor_create(){
 
 void posixc_reactor_gc(posixc_reactor*r){
     //todo
+	pthread_mutex_lock(&r->mtx);
+	if(list_empty(&r->gc_events)){
+		//printf("gc empty!\n");
+		pthread_mutex_unlock(&r->mtx);
+		return;
+	}
+	//printf("gc!\n");
+	posixc_event*tmp;
+	posixc_event*tmp_ahead;
+    list_for_each_entry_safe(tmp,tmp_ahead,&r->gc_events, node){
+	    //printf("type= %d fd= %d\n", tmp->type, tmp->fd);
+		list_del(&tmp->node);
+		posixc_event_destroy(tmp);
+    }
+	pthread_mutex_unlock(&r->mtx);
 }
+

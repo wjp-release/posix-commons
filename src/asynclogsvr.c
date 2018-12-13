@@ -87,5 +87,6 @@ void posixc_asynclogsvr_init(posixc_asynclogsvr*svr,const char* dir, int max_fil
 void posixc_asynclogsvr_destroy(posixc_asynclogsvr*svr){
     posixc_event_destroy(svr->timer_event);
     posixc_event_destroy(svr->dgram_event);
+    posixc_event_destroy(svr->sigint_event);
     posixc_reactor_destroy(svr->reactor);
 }

@@ -46,13 +46,23 @@ posixc_event* posixc_event_create(posixc_reactor* reactor, int fd, posixc_event_
     }
 }
 
+static void add_to_gc_list(posixc_event*e){
+    printf("add to gc list, reactor=%d\n", (int)e->reactor);
+    list_add_tail(&e->node, &e->reactor->gc_events);
+    posixc_event*tmp;
+    list_for_each_entry(tmp, &e->reactor->gc_events, node){
+	    printf("type= %d fd= %d\n", tmp->type, tmp->fd);
+    }
+}
+
 void posixc_event_destroy(posixc_event*e){
     // Any user thread that holds a reference to the posixc_event could stop it from working.
 	if (!e->closing) {  
         e->closing = true;
         posixc_event_plat_destroy(e);
 		shutdown(e->fd, SHUT_RDWR);
-        //@todo: add e into gc list
+        //add e into gc list, let reactor release it
+        add_to_gc_list(e);
 	}
     // Final destruction can only be performed by its owning reactor thread. This restriction ensures that the reactor won't process already destroyed posixc_events.
     if(pthread_self()==e->reactor->thread){

@@ -15,6 +15,7 @@ macro (wjptest NAME)
     math (EXPR POSIXC_TEST_PORT "${POSIXC_TEST_PORT}+20")
 endmacro (wjptest)
 
+wjptest(list_test)
 wjptest(slice_test)
 wjptest(timer_test)
 wjptest(asynclogsvr_test)

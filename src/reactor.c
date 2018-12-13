@@ -12,6 +12,7 @@ void posixc_reactor_destroy(posixc_reactor* reactor){
 	close(reactor->id);
 	pthread_mutex_destroy(&reactor->mtx);
 	free(reactor);
+	printf("reactor destroyed");
 }
 
 posixc_reactor* posixc_reactor_create(){

@@ -13,5 +13,6 @@
 /Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/edit_cache.dir
 /Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/asynclogcli_test.dir
 /Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/asynclogsvr_test.dir
+/Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/list_test.dir
 /Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/timer_test.dir
 /Users/wjp/Desktop/workspace/posix-commons/build/tests/CMakeFiles/slice_test.dir
